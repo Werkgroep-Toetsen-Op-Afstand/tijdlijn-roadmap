@@ -1,0 +1,62 @@
+# Tijdlijn Reoadmap Toetsen op afstand
+
+Tijdlijn van de activiteiten binnen de roadmap van de [werkgroep toetsen op afstand](https://versnellingsplan.nl/zones/toetsen-op-afstand/). 
+
+```{r, echo=FALSE}
+# Import data
+data.file <- read.csv("Roadmap.csv", header = T)
+
+# Select relevant columns
+# names(data.file)
+data.file <- data.file[,c("Titel","Thema","Startdatum","Eind.datum", "Doel")]
+data.file$Thema <- gsub('\\[|\\]|\\"', "", data.file$Thema)
+
+# data.file
+```
+
+```{r, echo=FALSE}
+# install.packages("timevis")
+library("timevis")
+
+# rename columns
+
+names(data.file) <- c("content", "group", "start", "end", "title")
+
+data.file$id <- 1:dim(data.file)[1]
+
+# Assign date class
+data.file$start <- as.Date(data.file$start, "%d-%m-%Y")
+data.file$end   <- as.Date(data.file$end,   "%d-%m-%Y")
+
+themes <- data.frame(number = 1:length(unique(data.file$group)),
+                     theme  = unique(data.file$group))
+
+data.file <- merge(data.file, themes, by.x = "group", by.y = "theme")
+
+themes[6, 2] = "Overig"
+
+data.file$group <- as.integer(data.file$number)
+
+# Rename themes
+names(themes) <- c("id", "content")
+
+themes$content[2] = "Toetsdoel & toetsontwerp"
+
+timevis(data.file[,c(-7)],
+        groups = themes
+        )
+```
+
+```{r, echo=FALSE, eval=FALSE}
+timevis(data = data.frame(start = c(Sys.Date(), 
+                                    Sys.Date(), 
+                                    Sys.Date() + 1, 
+                                    Sys.Date() + 2),
+                          content = c("one", "two", "three", "four"),
+  group  = c(1, 2, 1, 2)),
+  groups = data.frame(id      = 1:2, 
+                      content = c("G1", "G2"))
+ )
+
+```
+
