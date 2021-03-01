@@ -1,0 +1,10 @@
+name: "Werkgroep Toetsen op Afstand"
+output_dir: "."
+navbar:
+  title: "Werkgroep Toetsen op Afstand"
+  right:
+    - icon: fa-github-alt # fa-github 
+      href: https://github.com/Werkgroep-Toetsen-Op-Afstand/tijdlijn-roadmap
+output:
+  html_document:
+    theme: cerulean  # "default", "cerulean", "journal", "flatly", "readable", "spacelab", "united", "cosmo", "lumen", "paper", "sandstone", "simplex", and "yeti"
