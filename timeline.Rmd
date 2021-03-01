@@ -1,21 +1,51 @@
-# Tijdlijn Reoadmap Toetsen op afstand
-
-Tijdlijn van de activiteiten binnen de roadmap van de [werkgroep toetsen op afstand](https://versnellingsplan.nl/zones/toetsen-op-afstand/). 
+---
+title: "Tijdlijn Reoadmap Toetsen op afstand"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+---
 
 ```{r, echo=FALSE}
 # Import data
 data.file <- read.csv("Roadmap.csv", header = T)
+data.file$Thema        <- gsub('\\[|\\]|\\"', "", data.file$Thema)
+data.file$Stakeholders <- gsub('\\[|\\]|\\"', "", data.file$Stakeholders)
+data.file$Thema        <- gsub('\\%26', "&", data.file$Thema)
+data.file$Stakeholders <- gsub('\\%26', "&", data.file$Stakeholders)
+data.file$Stakeholders <- gsub(',', "<br>", data.file$Stakeholders)
+```
 
+## Tabel
+
+```{r, echo=FALSE}
+library("DT")
+
+datatable(data.file[, c("Titel","Doel","Thema","Stakeholders","Resultaat")],
+          rownames = FALSE,
+          escape = FALSE)
+
+```
+
+## Tijdlijn
+
+Tijdlijn van de activiteiten binnen de roadmap van de [werkgroep toetsen op afstand](https://versnellingsplan.nl/zones/toetsen-op-afstand/). 
+
+```{r, echo=FALSE}
 # Select relevant columns
 # names(data.file)
 data.file <- data.file[,c("Titel","Thema","Startdatum","Eind.datum", "Doel")]
-data.file$Thema <- gsub('\\[|\\]|\\"', "", data.file$Thema)
 
 # data.file
 ```
 
+
 ```{r, echo=FALSE}
 # install.packages("timevis")
+# https://github.com/daattali/timevis
 library("timevis")
 
 # rename columns
@@ -43,20 +73,12 @@ names(themes) <- c("id", "content")
 themes$content[2] = "Toetsdoel & toetsontwerp"
 
 timevis(data.file[,c(-7)],
-        groups = themes
+        groups = themes,
+        # options = list(width = "900px")
         )
 ```
 
-```{r, echo=FALSE, eval=FALSE}
-timevis(data = data.frame(start = c(Sys.Date(), 
-                                    Sys.Date(), 
-                                    Sys.Date() + 1, 
-                                    Sys.Date() + 2),
-                          content = c("one", "two", "three", "four"),
-  group  = c(1, 2, 1, 2)),
-  groups = data.frame(id      = 1:2, 
-                      content = c("G1", "G2"))
- )
 
-```
+
+
 
